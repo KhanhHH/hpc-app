@@ -19,10 +19,10 @@
 
 <script>
 import ListItem from "./ListItem";
+
 export default {
   components: { ListItem },
   data: () => ({
-    selectedFile: null,
     fileList: [
       {
         id: "777",

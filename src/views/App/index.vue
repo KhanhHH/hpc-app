@@ -4,23 +4,20 @@
     <v-app>
       <AppBar />
       <AppNavigator />
-
       <v-content>
         <v-container fluid>
           <router-view></router-view>
         </v-container>
       </v-content>
-
-      <!-- <v-footer app> </v-footer> -->
     </v-app>
   </div>
 </template>
 
 <script>
-import AppNavigator from "@/components/AppNavigator";
-import AppBar from "@/components/AppBar";
+import AppNavigator from "@/components/layout/AppNavigator";
+import AppBar from "@/components/layout/AppBar";
 export default {
   components: { AppNavigator, AppBar }
 };
 </script>
-<style lang="sass" scoped></style>
+<style lang="scss" scoped></style>
