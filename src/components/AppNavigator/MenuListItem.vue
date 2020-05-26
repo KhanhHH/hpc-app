@@ -1,5 +1,5 @@
 <template>
-  <v-list-item link :to=path >
+  <v-list-item link :to="{ path: '/app/' + path }">
     <v-list-item-action>
       <v-icon>{{ icon }}</v-icon>
     </v-list-item-action>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ["path", "title", "icon"],
+  props: ["path", "title", "icon"]
 };
 </script>
 

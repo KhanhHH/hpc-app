@@ -13,7 +13,13 @@ const routes = [
       {
         path: "storage",
         name: "Storage",
-        component: () => import("@/views/App/Storage")
+        component: () => import("@/views/App/Storage"),
+        children: [
+          {
+            path: "folder/:id",
+            name: "Storage Folder"
+          }
+        ]
       },
       {
         path: "computing",
@@ -24,7 +30,7 @@ const routes = [
         path: "virtual-machine",
         name: "VirtualMachine",
         component: () => import("@/views/App/VirtualMachine")
-      },
+      }
     ]
   }
 ];
