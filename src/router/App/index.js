@@ -2,13 +2,42 @@ const routes = [
   {
     path: "/app",
     name: "App",
-    redirect: "/app/dashboard",
+    redirect: "/app/service-dashboard",
     component: () => import("@/views/App"),
     children: [
       {
-        path: "service-register",
-        name: "Service Register",
-        component: () => import("@/views/App//ServiceRegister")
+        path: "service-dashboard",
+        name: "Service Dashboard",
+        redirect: "/app/service-dashboard/list",
+        component: () => import("@/views/App/ServiceDashboard"),
+        children: [
+          {
+            path: "list",
+            name: "Service List",
+            component: () => import("@/views/App/ServiceDashboard/ServiceList")
+          },
+          {
+            path: "register/:service",
+            name: "Service Register",
+            component: () =>
+              import("@/views/App/ServiceDashboard/ServiceRegister")
+            // children: [
+            //   {
+            //     path: "storage",
+            //     component: () =>
+            //       import(
+            //         "@/views/App/ServiceDashboard/ServiceRegister/RegisterForm/StorageForm"
+            //       )
+            //   },
+            //   {
+            //     path: "computing"
+            //   },
+            //   {
+            //     path: "virtual-machine"
+            //   }
+            // ]
+          }
+        ]
       },
       {
         path: "dashboard",

@@ -1,14 +1,18 @@
 <template>
   <div class="d-flex ml-3 mr-1">
     <div class="d-flex align-center">
-      <span class="title mr-3 ">Folder của tôi</span> /
-      <span style="max-width: 200px; " class="title ml-3 mr-3 text-truncate">
+      <span class="subtitle-1 mr-3 ">Folder của tôi</span> /
+      <span
+        class="subtitle-1 ml-3 mr-3 text-truncate"
+        style="max-width: 200px; "
+      >
         Thư mục xyz
       </span>
     </div>
     <v-spacer />
     <v-btn
       :disabled="!selectedFile"
+      small
       color="primary depressed"
       class="mr-2"
       @click="openConfirmDeleteDialog()"
@@ -18,14 +22,26 @@
     </v-btn>
     <v-btn
       :disabled="!selectedFile"
+      small
       color="primary depressed"
       class="mr-2"
       @click="openConfirmRenameDialog()"
     >
-      <v-icon class="mr-2">mdi-file-edit-outline</v-icon>
+      <v-icon class="mr-2">mdi-square-edit-outline</v-icon>
       <span>Đổi tên</span>
     </v-btn>
     <v-btn
+      :disabled="!selectedFile"
+      small
+      color="primary depressed"
+      class="mr-2"
+      @click="downloadFile()"
+    >
+      <v-icon class="mr-2">mdi-cloud-download-outline</v-icon>
+      <span>Download</span>
+    </v-btn>
+    <v-btn
+      small
       color="primary depressed"
       class="mr-2"
       @click="openConfirmCreateFolderDialog()"
@@ -41,7 +57,12 @@
       style="display:none;"
       @change="handleUploadFile($event)"
     />
-    <v-btn color="primary depressed" class="mr-4" @click="triggerFileInput()">
+    <v-btn
+      small
+      color="primary depressed"
+      class="mr-4"
+      @click="triggerFileInput()"
+    >
       <v-icon class="mr-2">mdi-cloud-upload-outline</v-icon>
       <span>Upload</span>
     </v-btn>
@@ -91,6 +112,9 @@ export default {
       isOpen: false
     }
   }),
+  beforeDestroy() {
+    this.$store.dispatch("storage/selectFile", null);
+  },
   methods: {
     openConfirmDeleteDialog() {
       if (this.selectedFile) {
@@ -115,21 +139,15 @@ export default {
         if (this.selectedFile) {
           console.log("delete file");
         }
-        return;
       }
-      if (!event.isConfirm) {
-        return;
-      }
+      this.$store.dispatch("storage/selectFile", null);
     },
     onConfirmCreateFolder(event) {
       this.confirmCreateFolderDialog.isOpen = false;
       if (event.isConfirm) {
         console.log("create folder", event.textInput);
-        return;
       }
-      if (!event.isConfirm) {
-        return;
-      }
+      this.$store.dispatch("storage/selectFile", null);
     },
     onConfirmRename(event) {
       this.confirmRenameDialog.isOpen = false;
@@ -137,17 +155,18 @@ export default {
         if (this.selectedFile) {
           console.log("rename file");
         }
-        return;
-      }
-      if (!event.isConfirm) {
-        return;
       }
     },
     triggerFileInput() {
       this.$refs.file.click();
     },
     handleUploadFile(event) {
+      this.$store.dispatch("storage/selectFile", null);
       console.log("[MESSAGE]: handleUploadFile -> event", event.target.files);
+    },
+    downloadFile() {
+      this.$store.dispatch("storage/selectFile", null);
+      console.log("helloworld");
     }
   }
 };

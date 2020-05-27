@@ -1,10 +1,15 @@
 <template>
   <v-navigation-drawer app clipped>
     <v-list dense>
-      <MenuListItem
+      <!-- <MenuListItem
         :title="'Bảng điều khiển'"
         :icon="'mdi-view-dashboard-outline'"
         :path="'dashboard'"
+      /> -->
+      <MenuListItem
+        :title="'Dịch vụ của tôi'"
+        :icon="'mdi-layers-triple-outline'"
+        :path="'service-dashboard'"
       />
       <MenuListItem
         :title="'Dịch vụ lưu trữ'"

@@ -1,11 +1,15 @@
 <template>
   <div class="">
-    Thiss is register serivce
+    This is Computin form
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    select: null
+  })
+};
 </script>
 
 <style lang="scss" scoped></style>
