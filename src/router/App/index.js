@@ -6,6 +6,11 @@ const routes = [
     component: () => import("@/views/App"),
     children: [
       {
+        path: "service-register",
+        name: "Service Register",
+        component: () => import("@/views/App//ServiceRegister")
+      },
+      {
         path: "dashboard",
         name: "Dashboard",
         component: () => import("@/views/App/Dashboard")
