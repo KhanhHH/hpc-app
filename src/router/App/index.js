@@ -21,21 +21,6 @@ const routes = [
             name: "Service Register",
             component: () =>
               import("@/views/App/ServiceDashboard/ServiceRegister")
-            // children: [
-            //   {
-            //     path: "storage",
-            //     component: () =>
-            //       import(
-            //         "@/views/App/ServiceDashboard/ServiceRegister/RegisterForm/StorageForm"
-            //       )
-            //   },
-            //   {
-            //     path: "computing"
-            //   },
-            //   {
-            //     path: "virtual-machine"
-            //   }
-            // ]
           }
         ]
       },
@@ -64,6 +49,29 @@ const routes = [
         path: "virtual-machine",
         name: "VirtualMachine",
         component: () => import("@/views/App/VirtualMachine")
+      },
+      {
+        path: "account-management",
+        name: "Account Management",
+        redirect: "/app/account-management/list",
+        component: () => import("@/views/App/AccountManagement"),
+        children: [
+          {
+            path: "list",
+            name: "Account List",
+            component: () => import("@/views/App/AccountManagement/AccountList")
+          },
+          {
+            path: "add",
+            name: "Add Account",
+            component: () => import("@/views/App/AccountManagement/AccountForm")
+          },
+          {
+            path: "edit/:id",
+            name: "Edit Account",
+            component: () => import("@/views/App/AccountManagement/AccountForm")
+          }
+        ]
       }
     ]
   }

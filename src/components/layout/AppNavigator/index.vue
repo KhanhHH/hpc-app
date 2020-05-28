@@ -12,7 +12,7 @@
         :path="'service-dashboard'"
       />
       <MenuListItem
-        :title="'Dịch vụ lưu trữ'"
+        :title="'Dịch vụ dữ liệu'"
         :icon="'mdi-folder-account-outline'"
         :path="'storage'"
       />
@@ -28,8 +28,9 @@
       />
       <v-divider dark class="my-4" />
       <MenuListItem
-        :title="'Quản lý tài khoản'"
+        :title="'Quản lý người dùng'"
         :icon="'mdi-account-box-multiple-outline'"
+        :path="'account-management'"
       />
       <MenuListItem :title="'Quản lý dịch vụ'" :icon="'mdi-cached'" />
       <MenuListItem :title="'Quản lý tác vụ'" :icon="'mdi-calendar-clock'" />

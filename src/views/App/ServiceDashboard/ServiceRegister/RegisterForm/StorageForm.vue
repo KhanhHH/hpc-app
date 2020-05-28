@@ -3,14 +3,14 @@
     <v-row justify="center">
       <div style="min-width:500px">
         <div class="title text-center px-4 py-4">
-          Form đăng ký dịch vụ lưu trữ
+          Form đăng ký dịch vụ dữ liệu
         </div>
         <DatePicker :startDate="startDate" @onChange="onSelectDate($event)" />
         <v-select
           outlined
           v-model="selectedSize"
           :items="sizeList"
-          label="Chọn dung lượng lưu trữ"
+          label="Chọn dung lượng dữ liệu"
           required
         />
         <v-slider

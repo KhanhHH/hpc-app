@@ -15,7 +15,7 @@ export default {
   data: () => ({
     serviceList: [
       {
-        title: "Dịch vụ lưu trữ",
+        title: "Dịch vụ dữ liệu",
         description: "Cho phép lưu trữ hơn 40GB dữ liệu.",
         serviceRoute: "storage",
         serviceStatus: "unregistered"
