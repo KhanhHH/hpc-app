@@ -4,7 +4,7 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">Tên</th>
+            <th class="text-left">Họ tên</th>
             <th class="text-left">Email</th>
             <th class="text-left">Điện thoại</th>
             <th class="text-left">Đơn vị công tác</th>

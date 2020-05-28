@@ -4,7 +4,7 @@
       <span class="title mr-3 ">Quản lý người dùng</span>
     </div>
     <v-spacer />
-    <v-btn large color="primary depressed" class="mr-2">
+    <v-btn large color="primary depressed" class="mr-2" to="add">
       <v-icon class="mr-2">mdi-plus-thick</v-icon>
       <span>Tạo tài khoản</span>
     </v-btn>

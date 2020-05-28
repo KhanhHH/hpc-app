@@ -13,10 +13,17 @@
       {{ item.workplace }}
     </td>
     <td>
-      {{ item.status }}
+      <template v-if="item.status === 'active'">
+        Đang hoạt động
+      </template>
+      <template v-if="item.status === 'deactive'">
+        Ngừng kích hoạt
+      </template>
     </td>
     <td>
-      --
+      <v-btn color="primary" fab x-small dark :to="'edit/' + item.id">
+        <v-icon>mdi-square-edit-outline</v-icon>
+      </v-btn>
     </td>
   </tr>
 </template>
