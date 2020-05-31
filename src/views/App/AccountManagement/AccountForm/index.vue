@@ -6,40 +6,48 @@
           {{ formText.title }}
         </div>
         <v-text-field
-          v-model="name"
+          :disabled="isLoading"
+          v-model="form.name"
           label="Họ tên"
           outlined
           required
-        ></v-text-field>
+        />
         <v-text-field
-          v-model="workplace"
+          :disabled="isLoading"
+          v-model="form.workplace"
           label="Đơn vị công tác"
           outlined
           required
-        ></v-text-field>
+        />
         <v-text-field
-          v-model="phone"
+          :disabled="isLoading"
+          v-model="form.phone"
           label="Điện thoại"
           outlined
           required
-        ></v-text-field>
+        />
 
         <v-text-field
-          v-model="email"
+          :disabled="isLoading"
+          autocomplete="new-password"
+          v-model="form.email"
           label="Email"
           outlined
           required
-        ></v-text-field>
+        />
         <v-text-field
-          v-model="password"
+          :disabled="isLoading"
+          autocomplete="new-password"
+          v-model="form.password"
           label="Mật khẩu"
           type="password"
           outlined
           required
-        ></v-text-field>
+        />
         <v-select
+          :disabled="isLoading"
           outlined
-          v-model="selectedType"
+          v-model="form.selectedType"
           :items="typeList"
           item-text="text"
           item-value="value"
@@ -47,8 +55,9 @@
           required
         />
         <v-select
+          :disabled="isLoading"
           outlined
-          v-model="selectedStatus"
+          v-model="form.selectedStatus"
           :items="status"
           item-text="text"
           item-value="value"
@@ -58,13 +67,23 @@
 
         <v-row justify="center" class="py-2">
           <v-btn
+            :disabled="isLoading"
             large
             color="primary depressed"
             style="width:350px"
             @click="submitForm()"
           >
-            <v-icon class="mr-2">mdi-send</v-icon>
-            <span>{{ formText.submit }}</span>
+            <v-progress-circular
+              v-if="isLoading"
+              :size="25"
+              :width="2"
+              color="white"
+              indeterminate
+            />
+            <template v-else>
+              <v-icon class="mr-2">mdi-send</v-icon>
+              <span>{{ formText.submit }}</span>
+            </template>
           </v-btn>
         </v-row>
         <v-row justify="center">
@@ -83,6 +102,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   components: {},
   data: () => ({
@@ -90,8 +110,16 @@ export default {
       title: "",
       submit: ""
     },
-    selectedStatus: "active",
-    selectedType: "member",
+    form: {
+      name: "",
+      workplace: "",
+      phone: "",
+      email: "",
+      password: "",
+      selectedStatus: "active",
+      selectedType: "member"
+    },
+    formType: null,
     typeList: [
       {
         text: "Member",
@@ -111,37 +139,69 @@ export default {
         text: "Ngừng hoạt động",
         value: "deactive"
       }
-    ],
-    name: "",
-    workplace: "",
-    phone: "",
-    email: "",
-    password: ""
+    ]
   }),
-  created() {
+  computed: {
+    ...mapState("account", [
+      "isLoading",
+      "requestError",
+      "requestStatus",
+      "accountById"
+    ])
+  },
+
+  async created() {
     if (this.$router.currentRoute.name === "Add Account") {
+      this.formType = "add";
       this.formText.title = "Tạo tài khoản thành viên";
       this.formText.submit = "Gửi yêu cầu tạo tài khoản";
     }
     if (this.$router.currentRoute.name === "Edit Account") {
+      this.formType = "edit";
+      const { id } = this.$router.currentRoute.params;
+      await this.$store.dispatch("account/getAccountById", { id });
+      this.form = this.accountById;
+
       this.formText.title = "Sửa thông tin tài khoản thành viên";
       this.formText.submit = "Gửi yêu cầu chỉnh sửa tài khoản";
     }
   },
-  computed: {},
   watch: {},
 
   methods: {
-    submitForm() {
-      const form = {
-        name: this.name,
-        workplace: this.workplace,
-        phone: this.phone,
-        password: this.password,
-        status: this.selectedStatus,
-        type: this.selectedType
+    async submitForm() {
+      const formSubmit = {
+        name: this.form.name,
+        workplace: this.form.workplace,
+        phone: this.form.phone,
+        email: this.form.email,
+        status: this.form.selectedStatus,
+        type: this.form.selectedType
       };
-      console.log("[MESSAGE]: submitForm -> form", form);
+      if (this.formType === "add") {
+        formSubmit.password = this.form.password;
+        await this.$store.dispatch("account/createAccount", formSubmit);
+      }
+      if (this.formType === "edit") {
+        const { id } = this.$router.currentRoute.params;
+        if (this.form.password && this.form.password.length > 0) {
+          formSubmit.password = this.form.password;
+        }
+        await this.$store.dispatch("account/updateAccount", {
+          id,
+          formSubmit
+        });
+      }
+
+      if (this.requestStatus === "error") {
+        this.$store.dispatch("ui/showSnackbar", {
+          timeout: 5000,
+          message: this.requestError.message
+        });
+      }
+      if (this.requestStatus === "success") {
+        this.$router.push({ path: "/app/account-management/list" });
+      }
     }
   }
 };

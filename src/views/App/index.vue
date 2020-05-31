@@ -1,7 +1,7 @@
 <template>
   <div class="">
-    This is app page
     <v-app>
+      <GlobalUI />
       <AppBar />
       <AppNavigator />
       <v-content>
@@ -18,9 +18,10 @@ import { mapState } from "vuex";
 
 import AppNavigator from "@/components/layout/AppNavigator";
 import AppBar from "@/components/layout/AppBar";
+import GlobalUI from "@/components/ui/global";
 
 export default {
-  components: { AppNavigator, AppBar },
+  components: { AppNavigator, AppBar, GlobalUI },
   computed: {
     ...mapState("account", ["myAccount", "requestError", "requestStatus"])
   },

@@ -12,12 +12,14 @@
               </div>
               <div class="pt-2" style="width: 100%;">
                 <v-text-field
+                  v-on:keyup.enter="login()"
                   v-model="loginForm.email"
                   label="Email"
                   placeholder="Nhập email của bạn"
                   outlined
                 />
                 <v-text-field
+                  v-on:keyup.enter="login()"
                   v-model="loginForm.password"
                   label="Mật khẩu"
                   placeholder="Nhập mật khẩu của bạn"
@@ -27,6 +29,7 @@
               </div>
 
               <v-btn
+                :disabled="!isFormValid"
                 style="width: 100%;"
                 large
                 color="primary"
@@ -64,21 +67,39 @@ export default {
       email: "",
       password: ""
     },
+    isFormValid: false,
     snackbar: {
       status: false,
       timeout: 3000
     }
   }),
-  computed: { ...mapState("account", ["requestError", "requestStatus"]) },
+  computed: {
+    ...mapState("account", ["requestError", "requestStatus"])
+  },
+  watch: {
+    loginForm: {
+      handler(value) {
+        const { email, password } = value;
+        if ((email.length > 6, password.length >= 6)) {
+          this.isFormValid = true;
+        } else {
+          this.isFormValid = false;
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     async login() {
-      await this.$store.dispatch("account/submitLogin", this.loginForm);
-      if (this.requestStatus === "error") {
-        this.snackbar.status = true;
-        return;
-      }
-      if (this.requestStatus === "success") {
-        this.$router.push({ path: "/app" });
+      if (this.isFormValid) {
+        await this.$store.dispatch("account/submitLogin", this.loginForm);
+        if (this.requestStatus === "error") {
+          this.snackbar.status = true;
+          return;
+        }
+        if (this.requestStatus === "success") {
+          this.$router.push({ path: "/app" });
+        }
       }
     }
   }

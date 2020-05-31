@@ -17,7 +17,15 @@
         Đang hoạt động
       </template>
       <template v-if="item.status === 'deactive'">
-        Ngừng kích hoạt
+        Ngừng hoạt động
+      </template>
+    </td>
+    <td>
+      <template v-if="item.type === 'member'">
+        Member
+      </template>
+      <template v-if="item.type === 'admin'">
+        Admin
       </template>
     </td>
     <td>
@@ -29,22 +37,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   props: ["item"],
   data: () => ({}),
-  computed: { ...mapState("storage", ["selectedFile"]) },
-  methods: {
-    openFolder(item) {
-      if (item.type === "folder") {
-        this.$router.push({ path: "/app/storage/folder/" + item.id });
-      }
-    },
-    selectFile(item) {
-      this.$store.dispatch("storage/selectFile", item);
-    }
-  }
+  methods: {}
 };
 </script>
 

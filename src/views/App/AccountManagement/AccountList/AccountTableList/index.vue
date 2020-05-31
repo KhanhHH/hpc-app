@@ -1,6 +1,13 @@
 <template>
-  <div class="">
-    <v-simple-table fixed-header height="400px">
+  <transition name="fade" mode="out-in">
+    <div
+      v-if="isLoading"
+      style="height:400px;"
+      class="d-flex align-center justify-center"
+    >
+      <v-progress-circular :size="70" :width="7" color="purple" indeterminate />
+    </div>
+    <v-simple-table v-else fixed-header height="400px">
       <template v-slot:default>
         <thead>
           <tr>
@@ -9,44 +16,33 @@
             <th class="text-left">Điện thoại</th>
             <th class="text-left">Đơn vị công tác</th>
             <th class="text-left">Trạng thái</th>
+            <th class="text-left">Loại tài khoản</th>
             <th class="text-left">Hành động</th>
           </tr>
         </thead>
         <tbody>
-          <ListItem v-for="item of userList" :item="item" :key="item.id" />
+          <ListItem v-for="item of allAccount" :item="item" :key="item.id" />
         </tbody>
       </template>
     </v-simple-table>
-  </div>
+  </transition>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import ListItem from "./ListItem";
 
 export default {
   components: { ListItem },
-  data: () => ({
-    userList: [
-      {
-        id: "777",
-        name: "Hoàng Huy Khánh",
-        email: "hoang.huykhanh01@gmail.com",
-        phone: "0762005242",
-        workplace: "Đại học Bách Khoa Hà Nội",
-        status: "active"
-      },
-      {
-        id: "1",
-        name: "Hoàng Huy Khánh",
-        email: "hoang.huykhanh01@gmail.com",
-        phone: "0762005242",
-        workplace: "Đại học Bách Khoa Hà Nội",
-        status: "active"
-      }
-    ]
-  }),
+  computed: {
+    ...mapState("account", ["isLoading", "allAccount"])
+  },
+  data: () => ({}),
+  created() {
+    this.$store.dispatch("account/getAllAccount");
+  },
   methods: {}
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="scss" scoped></style>
