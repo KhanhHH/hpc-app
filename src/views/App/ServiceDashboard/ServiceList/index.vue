@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    {{ myAccount }}
     <ServiceListItem
       v-for="service of serviceList"
       :key="service.title"
@@ -9,9 +10,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import ServiceListItem from "./ServiceListItem";
 export default {
   components: { ServiceListItem },
+  computed: {
+    ...mapState("account", ["myAccount"])
+  },
   data: () => ({
     serviceList: [
       {

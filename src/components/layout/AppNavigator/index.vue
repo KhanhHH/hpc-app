@@ -26,29 +26,55 @@
         :icon="'mdi-remote-desktop'"
         :path="'virtual-machine'"
       />
-      <v-divider dark class="my-4" />
-      <MenuListItem
-        :title="'Quản lý người dùng'"
-        :icon="'mdi-account-box-multiple-outline'"
-        :path="'account-management'"
-      />
-      <MenuListItem :title="'Quản lý dịch vụ'" :icon="'mdi-cached'" />
-      <MenuListItem :title="'Quản lý tác vụ'" :icon="'mdi-calendar-clock'" />
-      <MenuListItem :title="'Quản lý hệ thống'" :icon="'mdi-widgets-outline'" />
+      <template v-if="accountType === 'admin'">
+        <v-divider dark class="my-4" />
+        <MenuListItem
+          :title="'Quản lý người dùng'"
+          :icon="'mdi-account-box-multiple-outline'"
+          :path="'account-management'"
+        />
+        <MenuListItem :title="'Quản lý dịch vụ'" :icon="'mdi-cached'" />
+        <MenuListItem :title="'Quản lý tác vụ'" :icon="'mdi-calendar-clock'" />
+        <MenuListItem
+          :title="'Quản lý hệ thống'"
+          :icon="'mdi-widgets-outline'"
+        />
+      </template>
       <v-divider dark class="my-4" />
       <MenuListItem
         :title="'Cài đặt tài khoản'"
         :icon="'mdi-account-circle-outline'"
       />
-      <MenuListItem :title="'Đăng xuất'" :icon="'mdi-login-variant'" />
+      <v-list-item @click="logout()">
+        <v-list-item-action>
+          <v-icon>mdi-login-variant</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Đăng xuất</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+import Jwt from "@/utils/jwt";
+
 import MenuListItem from "./MenuListItem";
 export default {
-  components: { MenuListItem }
+  components: { MenuListItem },
+  data: () => ({
+    accountType: null
+  }),
+  created() {
+    this.accountType = Jwt.getProperty("type");
+  },
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push({ path: "/login" });
+    }
+  }
 };
 </script>
 

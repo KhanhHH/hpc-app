@@ -15,7 +15,7 @@
     ></v-text-field>
     <v-spacer />
     <span class="">
-      Khánh
+      {{ myAccount.name }}
     </span>
     <v-btn class="ms-2" icon large>
       <v-avatar size="32px" item>
@@ -29,10 +29,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data: () => ({
     drawer: null
-  })
+  }),
+  computed: {
+    ...mapState("account", ["myAccount"])
+  }
 };
 </script>
 

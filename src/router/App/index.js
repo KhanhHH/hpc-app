@@ -1,3 +1,5 @@
+import Jwt from "@/utils/jwt";
+
 const routes = [
   {
     path: "/app",
@@ -54,6 +56,12 @@ const routes = [
         path: "account-management",
         name: "Account Management",
         redirect: "/app/account-management/list",
+        beforeEnter: (to, from, next) => {
+          const accountType = Jwt.getProperty("type");
+          if (accountType === "admin") {
+            next();
+          }
+        },
         component: () => import("@/views/App/AccountManagement"),
         children: [
           {
