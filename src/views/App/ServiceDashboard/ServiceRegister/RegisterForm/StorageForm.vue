@@ -34,13 +34,23 @@
         </v-slider>
         <v-row justify="center" class="py-2">
           <v-btn
+            :disabled="isLoading"
             large
             color="primary depressed"
             style="width:350px"
             @click="submitForm()"
           >
-            <v-icon class="mr-2">mdi-send</v-icon>
-            <span>Gửi yêu cầu đăng ký dịch vụ</span>
+            <v-progress-circular
+              v-if="isLoading"
+              :size="25"
+              :width="2"
+              color="white"
+              indeterminate
+            />
+            <template v-else>
+              <v-icon class="mr-2">mdi-send</v-icon>
+              <span>Gửi yêu cầu đăng ký dịch vụ</span>
+            </template>
           </v-btn>
         </v-row>
         <v-row justify="center">
@@ -54,6 +64,8 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 import DatePicker from "@/components/ui/DatePicker";
 
 export default {
@@ -67,7 +79,13 @@ export default {
     customSize: 10
   }),
   created() {},
-  computed: {},
+  computed: {
+    ...mapState("featureRequest", [
+      "isLoading",
+      "requestError",
+      "requestStatus"
+    ])
+  },
   watch: {
     selectedSize(value) {
       if (value === "Tùy chọn (GB)") {
@@ -82,15 +100,27 @@ export default {
     onSelectDate(event) {
       this.selectedDate = event;
     },
-    submitForm() {
+    async submitForm() {
       const form = {
-        size: parseInt(this.selectedSize),
-        date: this.selectedDate
+        maxSize: parseInt(this.selectedSize),
+        endDate: this.selectedDate
       };
       if (this.isSelectCustomSize) {
-        form.size = this.customSize;
+        form.maxSize = this.customSize;
       }
-      console.log("[MESSAGE]: submitForm -> form", form);
+      await this.$store.dispatch(
+        "featureRequest/submitStorageFeatureRequest",
+        form
+      );
+      if (this.requestStatus === "error") {
+        this.$store.dispatch("ui/showSnackbar", {
+          timeout: 5000,
+          message: this.requestError.message
+        });
+      }
+      if (this.requestStatus === "success") {
+        this.$router.push({ path: "/app/service-dashboard/list" });
+      }
     }
   }
 };

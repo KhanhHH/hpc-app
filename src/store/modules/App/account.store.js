@@ -76,7 +76,12 @@ const actions = {
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");
       const { message, statusCode } = error.response.data;
-      commit("SET_REQUEST_ERROR", { message, statusCode });
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", { message: message[0], statusCode });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
     }
     commit("SET_IS_LOADING", false);
   },
@@ -106,7 +111,12 @@ const actions = {
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");
       const { message, statusCode } = error.response.data;
-      commit("SET_REQUEST_ERROR", { message, statusCode });
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", { message: message[0], statusCode });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
     }
     commit("SET_IS_LOADING", false);
   },
@@ -129,7 +139,12 @@ const actions = {
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");
       const { message, statusCode } = error.response.data;
-      commit("SET_REQUEST_ERROR", { message, statusCode });
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", { message: message[0], statusCode });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
     }
     commit("SET_IS_LOADING", false);
   },
@@ -142,7 +157,12 @@ const actions = {
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");
       const { message, statusCode } = error.response.data;
-      commit("SET_REQUEST_ERROR", { message, statusCode });
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", { message: message[0], statusCode });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
     }
     commit("SET_IS_LOADING", false);
   },

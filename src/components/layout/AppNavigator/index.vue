@@ -33,7 +33,11 @@
           :icon="'mdi-account-box-multiple-outline'"
           :path="'account-management'"
         />
-        <MenuListItem :title="'Quản lý dịch vụ'" :icon="'mdi-cached'" />
+        <MenuListItem
+          :title="'Quản lý dịch vụ'"
+          :icon="'mdi-cached'"
+          :path="'feature-management'"
+        />
         <MenuListItem :title="'Quản lý tác vụ'" :icon="'mdi-calendar-clock'" />
         <MenuListItem
           :title="'Quản lý hệ thống'"
@@ -72,7 +76,7 @@ export default {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push({ path: "/login" });
+      window.location.href = process.env.VUE_APP_URL + "/login";
     }
   }
 };

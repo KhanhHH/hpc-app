@@ -80,6 +80,31 @@ const routes = [
             component: () => import("@/views/App/AccountManagement/AccountForm")
           }
         ]
+      },
+      {
+        path: "feature-management",
+        name: "Feature Management",
+        redirect: "/app/feature-management/request-list",
+        beforeEnter: (to, from, next) => {
+          const accountType = Jwt.getProperty("type");
+          if (accountType === "admin") {
+            next();
+          }
+        },
+        component: () => import("@/views/App/FeatureManagement"),
+        children: [
+          {
+            path: "request-list",
+            name: "Feature Request List",
+            component: () => import("@/views/App/FeatureManagement/RequestList")
+          },
+          {
+            path: "approved-request-list",
+            name: "Approved Request List",
+            component: () =>
+              import("@/views/App/FeatureManagement/ApprovedRequestList")
+          }
+        ]
       }
     ]
   }

@@ -12,21 +12,30 @@
       <v-card-actions>
         <v-btn
           :to="'register/' + service.serviceRoute"
-          v-if="service.serviceStatus === 'unregistered'"
+          v-if="service.requestStatus === null"
           text
           color="deep-purple accent-4 "
         >
           Đăng ký sử dụng
         </v-btn>
         <v-btn
-          v-if="service.serviceStatus === 'registered'"
+          :to="'/app/' + service.serviceRoute"
+          v-if="service.requestStatus === 'approved'"
           text
           color="deep-purple accent-4 "
         >
           Truy cập dịch vụ
         </v-btn>
         <v-btn
-          v-if="service.serviceStatus === 'pending'"
+          :to="'register/' + service.serviceRoute"
+          v-if="service.requestStatus === 'rejected'"
+          text
+          color="deep-purple accent-4 "
+        >
+          Yêu cầu đã bị từ chối
+        </v-btn>
+        <v-btn
+          v-if="service.requestStatus === 'pending'"
           text
           color="deep-purple accent-4 "
         >

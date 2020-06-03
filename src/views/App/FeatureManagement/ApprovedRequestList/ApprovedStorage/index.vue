@@ -15,15 +15,19 @@
             <tr>
               <th class="text-left">Họ tên</th>
               <th class="text-left">Email</th>
-              <th class="text-left">Điện thoại</th>
-              <th class="text-left">Đơn vị công tác</th>
+              <th class="text-left">Ngày bắt đầu</th>
+              <th class="text-left">Ngày hết hạn</th>
+              <th class="text-left">Dung lượng lưu trữ</th>
               <th class="text-left">Trạng thái</th>
-              <th class="text-left">Loại tài khoản</th>
               <th class="text-left">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <ListItem v-for="item of allAccount" :item="item" :key="item.id" />
+            <ListItem
+              v-for="item of approvedStorageList"
+              :item="item"
+              :key="item.id"
+            />
           </tbody>
         </template>
       </v-simple-table>
@@ -34,17 +38,21 @@
 <script>
 import { mapState } from "vuex";
 import ListItem from "./ListItem";
-
 export default {
   components: { ListItem },
   computed: {
-    ...mapState("account", ["isLoading", "allAccount"])
+    ...mapState("featureManagement", [
+      "isLoading",
+      "requestError",
+      "requestStatus",
+      "approvedStorageList"
+    ])
   },
+
   data: () => ({}),
   created() {
-    this.$store.dispatch("account/getAllAccount");
-  },
-  methods: {}
+    this.$store.dispatch("featureManagement/getAllApprovedStorage");
+  }
 };
 </script>
 
