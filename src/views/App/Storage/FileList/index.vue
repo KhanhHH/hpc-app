@@ -10,7 +10,12 @@
           </tr>
         </thead>
         <tbody>
-          <ListItem v-for="item of fileList" :item="item" :key="item.id" />
+          <FolderListItem
+            v-for="item of folderList"
+            :item="item"
+            :key="item.id"
+          />
+          <FileListItem v-for="item of fileList" :item="item" :key="item.id" />
         </tbody>
       </template>
     </v-simple-table>
@@ -18,84 +23,18 @@
 </template>
 
 <script>
-import ListItem from "./ListItem";
+import { mapState } from "vuex";
+
+import FileListItem from "./FileListItem";
+import FolderListItem from "./FolderListItem";
 
 export default {
-  components: { ListItem },
-  data: () => ({
-    fileList: [
-      {
-        id: "777",
-        name: "Folder mới",
-        uploadDate: new Date(),
-        fileSize: "0.8 MB",
-        type: "folder"
-      },
-      {
-        id: "177",
-        name: "Folder mới",
-        uploadDate: new Date(),
-        fileSize: "0.8 MB",
-        type: "folder"
-      },
-      {
-        id: "277",
-        name: "Folder mới",
-        uploadDate: new Date(),
-        fileSize: "0.8 MB",
-        type: "folder"
-      },
-      {
-        id: "3",
-        name: "File mới",
-        uploadDate: new Date(),
-        fileSize: "0.8 MB",
-        type: "file"
-      },
-      {
-        id: "1",
-        name: "Tệp mới tải lên ",
-        uploadDate: new Date(),
-        fileSize: "200 MB",
-        type: "file"
-      },
-      {
-        id: "099",
-        name: "uild complete. The dist directory is ready to be deplo",
-        uploadDate: new Date(),
-        fileSize: "500 MB",
-        type: "file"
-      },
-      {
-        id: "768678",
-        name: "uild complete. The dist directory is ready to be deplo",
-        uploadDate: new Date(),
-        fileSize: "500 MB",
-        type: "file"
-      },
-      {
-        id: "7",
-        name: "uild complete. The dist directory is ready to be deplo",
-        uploadDate: new Date(),
-        fileSize: "500 MB",
-        type: "file"
-      },
-      {
-        id: "8",
-        name: "uild complete. The dist directory is ready to be deplo",
-        uploadDate: new Date(),
-        fileSize: "500 MB",
-        type: "file"
-      },
-      {
-        id: "9",
-        name: "uild complete. The dist directory is ready to be deplo",
-        uploadDate: new Date(),
-        fileSize: "500 MB",
-        type: "file"
-      }
-    ]
-  }),
+  components: { FileListItem, FolderListItem },
+  data: () => ({}),
+  computed: {
+    ...mapState("storage", ["fileList", "folderList"])
+  },
+  created() {},
   methods: {}
 };
 </script>

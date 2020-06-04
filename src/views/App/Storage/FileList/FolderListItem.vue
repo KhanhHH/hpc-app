@@ -3,21 +3,20 @@
     @click="selectFile(item)"
     @dblclick="openFolder(item)"
     :class="{ selected: selectedFile && selectedFile.id === item.id }"
+    style="cursor:pointer;"
   >
     <td>
-      <v-icon v-if="item.type === 'folder'" class="mb-1 mr-2">
+      <v-icon class="mb-1 mr-2">
         mdi-folder
       </v-icon>
-      <v-icon v-if="item.type === 'file'" class="mb-1 mr-2">mdi-file</v-icon>
       <span class="text-truncate" style="max-width: 500px;">
         {{ item.name }}
       </span>
     </td>
     <td>
-      {{ new Intl.DateTimeFormat("vi-VN").format(item.uploadDate) }}
+      --
     </td>
-    <td v-if="item.type === 'folder'">--</td>
-    <td v-if="item.type === 'file'">{{ item.fileSize }}</td>
+    <td>--</td>
   </tr>
 </template>
 
@@ -30,9 +29,8 @@ export default {
   computed: { ...mapState("storage", ["selectedFile"]) },
   methods: {
     openFolder(item) {
-      if (item.type === "folder") {
-        this.$router.push({ path: "/app/storage/folder/" + item.id });
-      }
+      console.log("[MESSAGE]: openFolder -> item", item);
+      this.$router.push({ path: "/app/storage/folder/" + item.id });
     },
     selectFile(item) {
       this.$store.dispatch("storage/selectFile", item);
