@@ -1,8 +1,10 @@
 <template>
   <div class="">
     <StorageInfo class="mt-2 mb-4" />
-    <FolderNavigator class="mb-3" />
-    <FileList />
+    <div :class="{ disabled: myStorage.status === 'deactive' }">
+      <FolderNavigator class="mb-3" />
+      <FileList />
+    </div>
   </div>
 </template>
 
@@ -20,7 +22,7 @@ export default {
     ...mapState("storage", ["myStorage", "currentFolder", "fileList"])
   },
   watch: {
-    async $route(to, from) {
+    async $route(to) {
       const { id } = to.params;
       if (!id) {
         await this.$store.dispatch("storage/getMyStorage");
@@ -46,9 +48,14 @@ export default {
         id,
         folderType
       });
+    } else {
+      await this.$store.dispatch("storage/getFolder", {
+        id,
+        folderType: "directory"
+      });
     }
   }
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="scss" scoped></style>

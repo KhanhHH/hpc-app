@@ -15,6 +15,11 @@ export default {
 </script>
 
 <style lang="scss">
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

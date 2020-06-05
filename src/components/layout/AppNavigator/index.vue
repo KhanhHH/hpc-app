@@ -15,16 +15,19 @@
         :title="'Dịch vụ dữ liệu'"
         :icon="'mdi-folder-account-outline'"
         :path="'storage'"
+        :disabled="featureRequestStatus.storage !== 'approved'"
       />
       <MenuListItem
         :title="'Dịch vụ tính toán'"
         :icon="'mdi-state-machine'"
         :path="'computing'"
+        :disabled="featureRequestStatus.computing !== 'approved'"
       />
       <MenuListItem
         :title="'Dịch vụ máy ảo'"
         :icon="'mdi-remote-desktop'"
         :path="'virtual-machine'"
+        :disabled="featureRequestStatus.virtualMachine !== 'approved'"
       />
       <template v-if="accountType === 'admin'">
         <v-divider dark class="my-4" />
@@ -38,16 +41,22 @@
           :icon="'mdi-cached'"
           :path="'feature-management'"
         />
-        <MenuListItem :title="'Quản lý tác vụ'" :icon="'mdi-calendar-clock'" />
+        <MenuListItem
+          :title="'Quản lý tác vụ'"
+          :icon="'mdi-calendar-clock'"
+          :disabled="true"
+        />
         <MenuListItem
           :title="'Quản lý hệ thống'"
           :icon="'mdi-widgets-outline'"
+          :disabled="true"
         />
       </template>
       <v-divider dark class="my-4" />
       <MenuListItem
         :title="'Cài đặt tài khoản'"
         :icon="'mdi-account-circle-outline'"
+        :disabled="true"
       />
       <v-list-item @click="logout()">
         <v-list-item-action>
@@ -65,11 +74,15 @@
 import Jwt from "@/utils/jwt";
 
 import MenuListItem from "./MenuListItem";
+import { mapState } from "vuex";
 export default {
   components: { MenuListItem },
   data: () => ({
     accountType: null
   }),
+  computed: {
+    ...mapState("featureRequest", ["featureRequestStatus"])
+  },
   created() {
     this.accountType = Jwt.getProperty("type");
   },

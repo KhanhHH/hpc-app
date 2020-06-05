@@ -9,7 +9,7 @@
       </v-card-text>
       <v-text-field
         v-if="dialog.textInputLabel"
-        v-model="textInput"
+        v-model="dialog.textInput"
         :label="dialog.textInputLabel"
         outlined
         class="mr-5 ml-5 mt-4"
@@ -41,22 +41,20 @@
 <script>
 export default {
   props: ["dialog"],
-  data: () => ({
-    textInput: ""
-  }),
+  data: () => ({}),
   methods: {
     confirm() {
       this.$emit("onClose", {
         isConfirm: true,
-        textInput: this.textInput
+        textInput: this.dialog.textInput
       });
-      this.textInput = "";
+      this.dialog.textInput = "";
     },
     cancel() {
       this.$emit("onClose", {
         isConfirm: false
       });
-      this.textInput = "";
+      this.dialog.textInput = "";
     }
   }
 };

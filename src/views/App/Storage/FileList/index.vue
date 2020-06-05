@@ -1,24 +1,37 @@
 <template>
   <div class="">
-    <v-simple-table fixed-header height="400px">
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Tên</th>
-            <th class="text-left">Ngày tải lên</th>
-            <th class="text-left">Kích thước</th>
-          </tr>
-        </thead>
-        <tbody>
-          <FolderListItem
-            v-for="item of folderList"
-            :item="item"
-            :key="item.id"
-          />
-          <FileListItem v-for="item of fileList" :item="item" :key="item.id" />
-        </tbody>
-      </template>
-    </v-simple-table>
+    <div
+      v-if="isLoading"
+      style="height:400px;"
+      class="d-flex align-center justify-center"
+    >
+      <v-progress-circular :size="70" :width="7" color="purple" indeterminate />
+    </div>
+    <transition name="fade" mode="out-in">
+      <v-simple-table v-if="!isLoading" fixed-header height="400px">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Tên</th>
+              <th class="text-left">Ngày tải lên</th>
+              <th class="text-left">Kích thước</th>
+            </tr>
+          </thead>
+          <tbody>
+            <FolderListItem
+              v-for="item of folderList"
+              :item="item"
+              :key="item.id"
+            />
+            <FileListItem
+              v-for="item of fileList"
+              :item="item"
+              :key="item.id"
+            />
+          </tbody>
+        </template>
+      </v-simple-table>
+    </transition>
   </div>
 </template>
 
@@ -32,7 +45,13 @@ export default {
   components: { FileListItem, FolderListItem },
   data: () => ({}),
   computed: {
-    ...mapState("storage", ["fileList", "folderList"])
+    ...mapState("storage", [
+      "isLoading",
+      "requestError",
+      "requestStatus",
+      "fileList",
+      "folderList"
+    ])
   },
   created() {},
   methods: {}

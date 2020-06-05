@@ -1,8 +1,8 @@
 <template>
   <tr
-    @click="selectFile(item)"
+    @click="selectItem(item)"
     @dblclick="openFolder(item)"
-    :class="{ selected: selectedFile && selectedFile.id === item.id }"
+    :class="{ selected: selectedItem && selectedItem.id === item.id }"
     style="cursor:pointer;"
   >
     <td>
@@ -26,14 +26,14 @@ import { mapState } from "vuex";
 export default {
   props: ["item"],
   data: () => ({}),
-  computed: { ...mapState("storage", ["selectedFile"]) },
+  computed: { ...mapState("storage", ["selectedItem"]) },
   methods: {
     openFolder(item) {
-      console.log("[MESSAGE]: openFolder -> item", item);
       this.$router.push({ path: "/app/storage/folder/" + item.id });
     },
-    selectFile(item) {
-      this.$store.dispatch("storage/selectFile", item);
+    selectItem(item) {
+      this.$store.dispatch("storage/selectItem", item);
+      this.$store.dispatch("storage/updateSelectItemType", "folder");
     }
   }
 };
