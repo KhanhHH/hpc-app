@@ -1,14 +1,7 @@
 <template>
   <div class="d-flex ml-3 mr-1">
     <div class="d-flex align-center">
-      <span class="subtitle-1 mr-3 ">Folder của tôi</span>
-      <!-- /
-      <span
-        class="subtitle-1 ml-3 mr-3 text-truncate"
-        style="max-width: 200px; "
-      >
-        Thư mục xyz
-      </span> -->
+      <span class="title mr-3 ">Folder của tôi</span>
     </div>
     <v-spacer />
     <v-btn

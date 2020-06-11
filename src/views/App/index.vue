@@ -33,6 +33,7 @@ export default {
     ) {
       this.$router.push({ path: "/login" });
     }
+    await this.$store.dispatch("featureRequest/getMyFeatureRequestStatus");
   },
   methods: {}
 };

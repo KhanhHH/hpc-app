@@ -1,4 +1,5 @@
-import FeatureService from "@/services/modules/feature.service";
+import ComputingService from "@/services/modules/computing.service";
+import StorageService from "@/services/modules/storage.service";
 
 const initalState = {
   isLoading: false,
@@ -7,19 +8,20 @@ const initalState = {
     code: "",
     message: ""
   },
-  featureRequestStatus: {
-    storage: null,
-    computing: null,
-    virtualMachine: null
-  }
+  myComputing: {
+    userType: null,
+    maxCpu: 0,
+    maxRam: 0,
+    startDate: null,
+    endDate: null,
+    status: null
+  },
+  myComputingQueue: []
 };
 
 const state = initalState;
 const getters = {};
 const mutations = {
-  RESET(state, payload) {
-    state[payload] = initalState[payload];
-  },
   SET_IS_LOADING(state, payload) {
     state.isLoading = payload;
   },
@@ -29,80 +31,89 @@ const mutations = {
   SET_REQUEST_STATUS(state, payload) {
     state.requestStatus = payload;
   },
-  SET_FEATURE_REQUEST_STATUS(state, payload) {
-    state.featureRequestStatus = payload;
+  SET_MY_COMPUTING(state, payload) {
+    state.myComputing = payload;
+  },
+  SET_MY_COMPUTING_QUEUE(state, payload) {
+    state.myComputingQueue = payload;
   }
 };
 const actions = {
-  reset({ commit }) {
-    commit("RESET");
-  },
-
-  async getMyFeatureRequestStatus({ commit }) {
+  async getMyComputing({ commit }) {
     commit("SET_IS_LOADING", true);
     try {
-      const myFeatureRequestStatus = await FeatureService.getMyFeatureRequestStatus();
+      const myComputing = await ComputingService.getMyComputing();
       const {
-        storageRequestStatus,
-        computingRequestStatus,
-        virtualMachineRequestStatus
-      } = myFeatureRequestStatus.data;
-      commit("SET_FEATURE_REQUEST_STATUS", {
-        storage: storageRequestStatus,
-        computing: computingRequestStatus,
-        virtualMachine: virtualMachineRequestStatus
-      });
-
-      commit("SET_REQUEST_STATUS", "success");
-    } catch (error) {
-      commit("SET_REQUEST_STATUS", "error");
-      const { message, statusCode } = error.response.data;
-      const isMessageArray = Array.isArray(message);
-      if (isMessageArray) {
-        commit("SET_REQUEST_ERROR", {
-          message: message[0],
-          statusCode
-        });
-      } else {
-        commit("SET_REQUEST_ERROR", { message, statusCode });
-      }
-    }
-    commit("SET_IS_LOADING", false);
-  },
-  async submitStorageFeatureRequest({ commit }, payload) {
-    commit("SET_IS_LOADING", true);
-    try {
-      const { maxSize, endDate } = payload;
-      await FeatureService.requestStorage({
-        maxSize: maxSize * 1073741824,
-        endDate
-      });
-      commit("SET_REQUEST_STATUS", "success");
-    } catch (error) {
-      commit("SET_REQUEST_STATUS", "error");
-      const { message, statusCode } = error.response.data;
-      const isMessageArray = Array.isArray(message);
-      if (isMessageArray) {
-        commit("SET_REQUEST_ERROR", {
-          message: message[0],
-          statusCode
-        });
-      } else {
-        commit("SET_REQUEST_ERROR", { message, statusCode });
-      }
-    }
-    commit("SET_IS_LOADING", false);
-  },
-  async submitComputingFeatureRequest({ commit }, payload) {
-    commit("SET_IS_LOADING", true);
-    try {
-      const { userType, maxCpu, maxRam, endDate } = payload;
-      await FeatureService.requestComputing({
         userType,
         maxCpu,
         maxRam,
-        endDate
+        startDate,
+        endDate,
+        status
+      } = myComputing.data;
+      commit("SET_MY_COMPUTING", {
+        userType,
+        maxCpu,
+        maxRam,
+        startDate,
+        endDate,
+        status
       });
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
+  },
+  async getMyComputingQueue({ commit }) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const myComputingQueue = await ComputingService.getMyComputingQueue();
+      commit("SET_MY_COMPUTING_QUEUE", myComputingQueue.data);
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
+  },
+  async createComputingQueue({ commit }, payload) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const { form, formData } = payload;
+      const { cpu, maxRamPerProcess } = form;
+      const uploadedScript = await StorageService.uploadScript(formData);
+      console.log({
+        script: uploadedScript.data.originalname,
+        cpu,
+        maxRamPerProcess
+      });
+      await ComputingService.createComputingQueue({
+        script: uploadedScript.data.originalname,
+        cpu,
+        maxRamPerProcess
+      });
+      const myComputingQueue = await ComputingService.getMyComputingQueue();
+      commit("SET_MY_COMPUTING_QUEUE", myComputingQueue.data);
       commit("SET_REQUEST_STATUS", "success");
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");

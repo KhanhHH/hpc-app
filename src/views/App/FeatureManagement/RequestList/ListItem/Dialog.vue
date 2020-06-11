@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog.isOpen" max-width="400">
-    <v-card v-if="item.featureCode === 'storage'">
+    <v-card>
       <div class="px-4">
-        <div class="">
+        <div v-if="item.featureCode === 'storage'">
           <v-card-title class="headline">
             Thông tin dịch vụ
           </v-card-title>
@@ -22,6 +22,64 @@
               </span>
               <span class="subtitle-1 text--primary font-weight-medium">
                 {{ item.maxSize | convertSize }}
+              </span>
+            </div>
+            <div>
+              <span class="subtitle-1 text--primary">
+                Hạn sử dụng:
+              </span>
+              <span class="subtitle-1 text--primary font-weight-medium">
+                {{
+                  new Intl.DateTimeFormat("vi-VN").format(
+                    new Date(item.endDate)
+                  )
+                }}
+              </span>
+            </div>
+          </v-card-text>
+        </div>
+        <div v-if="item.featureCode === 'computing'">
+          <v-card-title class="headline">
+            Thông tin dịch vụ
+          </v-card-title>
+
+          <v-card-text>
+            <div>
+              <span class="subtitle-1 text--primary">
+                Loại dịch vụ:
+              </span>
+              <span class="subtitle-1 text--primary font-weight-medium">
+                Dịch vụ tính toán
+              </span>
+            </div>
+            <div>
+              <span class="subtitle-1 text--primary">
+                Số CPU:
+              </span>
+              <span class="subtitle-1 text--primary font-weight-medium">
+                {{ item.maxCpu }}
+              </span>
+            </div>
+            <div>
+              <span class="subtitle-1 text--primary">
+                Số RAM:
+              </span>
+              <span class="subtitle-1 text--primary font-weight-medium">
+                {{ item.maxRam }}
+              </span>
+            </div>
+            <div>
+              <span class="subtitle-1 text--primary">
+                Loại người dùng:
+              </span>
+              <span class="subtitle-1 text--primary font-weight-medium">
+                <template v-if="item.userType === 'teacher'">
+                  Giáo viên
+                </template>
+                <template v-if="item.userType === 'postgraduate'">
+                  Nghiên cứu sinh
+                </template>
+                <template v-if="item.userType === 'other'">Khác</template>
               </span>
             </div>
             <div>

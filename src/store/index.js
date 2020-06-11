@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import StorageStore from "./modules/App/storage.store";
+import ComputingStore from "./modules/App/computing.store";
 import AccountStore from "./modules/App/account.store";
 import UIStore from "./modules/App/ui.store";
 import FeatureRequestStore from "./modules/App/feature-request.store";
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     ui: UIStore,
     account: AccountStore,
     storage: StorageStore,
+    computing: ComputingStore,
     featureRequest: FeatureRequestStore,
     featureManagement: FeatureManagementStore
   }

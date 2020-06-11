@@ -4,6 +4,9 @@ export default {
   uploadFile(folderId, formData) {
     return Api().post(`storages/upload/folder/${folderId}`, formData);
   },
+  uploadScript(formData) {
+    return Api().post(`storages/upload/script`, formData);
+  },
   getMyStorage() {
     return Api().get("storages/me");
   },

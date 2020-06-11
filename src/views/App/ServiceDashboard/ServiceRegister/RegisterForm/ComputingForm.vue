@@ -16,12 +16,12 @@
           required
         />
         <v-subheader>
-          Chọn số lõi (core) tối đa sử dụng đồng thời cho một công việc
+          Chọn số CPU tối đa sử dụng
         </v-subheader>
 
         <v-card-text>
           <v-slider
-            v-model="core"
+            v-model="cpu"
             thumb-label="always"
             :thumb-size="24"
             min="1"
@@ -31,7 +31,7 @@
         </v-card-text>
 
         <v-subheader>
-          Chọn số RAM (MB) tối đa sử dụng đồng thời cho một tiến trình tính toán
+          Chọn số RAM (MB) tối đa sử dụng
         </v-subheader>
 
         <v-card-text>
@@ -43,13 +43,6 @@
             max="2000"
           ></v-slider>
         </v-card-text>
-
-        <v-textarea
-          outlined
-          name="description"
-          label="Mô tả nhiệm vụ tính toán"
-          v-model="description"
-        ></v-textarea>
 
         <v-row justify="center" class="py-2">
           <v-btn
@@ -74,15 +67,15 @@
 </template>
 <script>
 import DatePicker from "@/components/ui/DatePicker";
+import { mapState } from "vuex";
 
 export default {
   components: { DatePicker },
   data: () => ({
     selectedDate: new Date(),
     selectedUserType: null,
-    core: 1,
+    cpu: 1,
     ram: 50,
-    description: null,
     userTypeList: [
       {
         text: "Giáo viên",
@@ -100,22 +93,39 @@ export default {
     startDate: new Date().setDate(new Date().getDate() + 1)
   }),
   created() {},
-  computed: {},
+  computed: {
+    ...mapState("featureRequest", [
+      "isLoading",
+      "requestError",
+      "requestStatus"
+    ])
+  },
   watch: {},
 
   methods: {
     onSelectDate(event) {
       this.selectedDate = event;
     },
-    submitForm() {
+    async submitForm() {
       const form = {
-        date: this.selectedDate,
+        endDate: this.selectedDate,
         userType: this.selectedUserType,
-        maxCore: this.core,
-        maxRam: this.ram,
-        description: this.description
+        maxCpu: this.cpu,
+        maxRam: this.ram
       };
-      console.log("[MESSAGE]: submitForm -> form", form);
+      await this.$store.dispatch(
+        "featureRequest/submitComputingFeatureRequest",
+        form
+      );
+      if (this.requestStatus === "error") {
+        this.$store.dispatch("ui/showSnackbar", {
+          timeout: 5000,
+          message: this.requestError.message
+        });
+      }
+      if (this.requestStatus === "success") {
+        this.$router.push({ path: "/app/service-dashboard/list" });
+      }
     }
   }
 };

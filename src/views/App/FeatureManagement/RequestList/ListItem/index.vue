@@ -10,10 +10,10 @@
       <template v-if="item.featureCode === 'storage'">
         Dịch vụ dữ liệu
       </template>
-      <template v-if="item.status === 'computing'">
+      <template v-if="item.featureCode === 'computing'">
         Dịch vụ tính toán
       </template>
-      <template v-if="item.status === 'virtual-machine'">
+      <template v-if="item.featureCode === 'virtual-machine'">
         Dịch vụ máy ảo
       </template>
     </td>

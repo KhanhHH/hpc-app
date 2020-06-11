@@ -27,11 +27,6 @@ const routes = [
         ]
       },
       {
-        path: "dashboard",
-        name: "Dashboard",
-        component: () => import("@/views/App/Dashboard")
-      },
-      {
         path: "storage",
         name: "Storage",
         component: () => import("@/views/App/Storage"),

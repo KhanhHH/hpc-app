@@ -4,6 +4,9 @@ export default {
   requestStorage(body) {
     return Api().post("features/request-storage", body);
   },
+  requestComputing(body) {
+    return Api().post("features/request-computing", body);
+  },
   getMyFeatureRequestStatus() {
     return Api().get("features/requests/my-status");
   },
