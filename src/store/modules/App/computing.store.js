@@ -16,7 +16,8 @@ const initalState = {
     endDate: null,
     status: null
   },
-  myComputingQueue: []
+  myComputingQueue: [],
+  allComputingQueue: []
 };
 
 const state = initalState;
@@ -36,6 +37,9 @@ const mutations = {
   },
   SET_MY_COMPUTING_QUEUE(state, payload) {
     state.myComputingQueue = payload;
+  },
+  SET_ALL_COMPUTING_QUEUE(state, payload) {
+    state.allComputingQueue = payload;
   }
 };
 const actions = {
@@ -96,17 +100,33 @@ const actions = {
     }
     commit("SET_IS_LOADING", false);
   },
+  async getAllComputingQueue({ commit }) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const allComputingQueue = await ComputingService.getAllComputingQueue();
+      commit("SET_ALL_COMPUTING_QUEUE", allComputingQueue.data);
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
+  },
   async createComputingQueue({ commit }, payload) {
     commit("SET_IS_LOADING", true);
     try {
       const { form, formData } = payload;
       const { cpu, maxRamPerProcess } = form;
       const uploadedScript = await StorageService.uploadScript(formData);
-      console.log({
-        script: uploadedScript.data.originalname,
-        cpu,
-        maxRamPerProcess
-      });
       await ComputingService.createComputingQueue({
         script: uploadedScript.data.originalname,
         cpu,
@@ -114,6 +134,52 @@ const actions = {
       });
       const myComputingQueue = await ComputingService.getMyComputingQueue();
       commit("SET_MY_COMPUTING_QUEUE", myComputingQueue.data);
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
+  },
+  async updateMyComputingQueue({ commit }, payload) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const { id, status } = payload;
+      await ComputingService.updateComputingQueueStatus(id, { status });
+      const myComputingQueue = await ComputingService.getMyComputingQueue();
+      commit("SET_MY_COMPUTING_QUEUE", myComputingQueue.data);
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
+  },
+  async updateComputingQueue({ commit }, payload) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const { id, status } = payload;
+      await ComputingService.updateComputingQueueStatus(id, { status });
+      const allComputingQueue = await ComputingService.getAllComputingQueue();
+      commit("SET_ALL_COMPUTING_QUEUE", allComputingQueue.data);
       commit("SET_REQUEST_STATUS", "success");
     } catch (error) {
       commit("SET_REQUEST_STATUS", "error");

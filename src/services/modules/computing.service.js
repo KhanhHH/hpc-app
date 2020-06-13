@@ -7,7 +7,13 @@ export default {
   getMyComputingQueue() {
     return Api().get("computings/queue/me");
   },
+  getAllComputingQueue() {
+    return Api().get("computings/queue");
+  },
   createComputingQueue(body) {
     return Api().post("computings/queue", body);
+  },
+  updateComputingQueueStatus(id, body) {
+    return Api().patch(`computings/queue/${id}/status`, body);
   }
 };

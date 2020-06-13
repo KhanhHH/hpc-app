@@ -100,6 +100,17 @@ const routes = [
               import("@/views/App/FeatureManagement/ApprovedRequestList")
           }
         ]
+      },
+      {
+        path: "computing-management",
+        name: "Computing Management",
+        beforeEnter: (to, from, next) => {
+          const accountType = Jwt.getProperty("type");
+          if (accountType === "admin") {
+            next();
+          }
+        },
+        component: () => import("@/views/App/ComputingManagement")
       }
     ]
   }

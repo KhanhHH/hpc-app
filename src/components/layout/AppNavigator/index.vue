@@ -42,9 +42,9 @@
           :path="'feature-management'"
         />
         <MenuListItem
-          :title="'Quản lý tác vụ'"
+          :title="'Quản lý tính toán'"
           :icon="'mdi-calendar-clock'"
-          :disabled="true"
+          :path="'computing-management'"
         />
         <MenuListItem
           :title="'Quản lý hệ thống'"

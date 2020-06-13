@@ -1,6 +1,12 @@
 <template>
   <tr>
     <td class="text-truncate" style="max-width: 200px;">
+      {{ item.account.name }}
+    </td>
+    <td class="text-truncate" style="max-width: 200px;">
+      {{ item.account.email }}
+    </td>
+    <td class="text-truncate" style="max-width: 200px;">
       {{ item.script }}
     </td>
     <td class="text-truncate" style="max-width: 300px;">
@@ -25,7 +31,7 @@
     </td>
     <td>
       <v-btn
-        :disabled="item.status !== 'pending'"
+        :disabled="item.status === 'completed' || item.status === 'canceled'"
         class="white--text"
         color="red"
         small
@@ -43,7 +49,7 @@ export default {
   data: () => ({}),
   methods: {
     cancelQueueStatus() {
-      this.$store.dispatch("computing/updateMyComputingQueue", {
+      this.$store.dispatch("computing/updateComputingQueue", {
         id: this.item.id,
         status: "canceled"
       });
