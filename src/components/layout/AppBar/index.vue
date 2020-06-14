@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app clipped-left dense flat>
-    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon>
     <span class="title ml-3 mr-5">
       HPC
       <span class="font-weight-light">services</span>
@@ -31,11 +31,15 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  data: () => ({
-    drawer: null
-  }),
+  data: () => ({}),
   computed: {
-    ...mapState("account", ["myAccount"])
+    ...mapState("account", ["myAccount"]),
+    ...mapState("ui", ["drawer"])
+  },
+  methods: {
+    toggleDrawer() {
+      this.$store.dispatch("ui/toggleDrawer", !this.drawer);
+    }
   }
 };
 </script>

@@ -111,6 +111,17 @@ const routes = [
           }
         },
         component: () => import("@/views/App/ComputingManagement")
+      },
+      {
+        path: "virtual-machine-management",
+        name: "Virtual Machine Management",
+        beforeEnter: (to, from, next) => {
+          const accountType = Jwt.getProperty("type");
+          if (accountType === "admin") {
+            next();
+          }
+        },
+        component: () => import("@/views/App/VirtualMachineManagement")
       }
     ]
   }

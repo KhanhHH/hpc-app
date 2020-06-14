@@ -1,11 +1,6 @@
 <template>
-  <v-navigation-drawer app clipped>
+  <v-navigation-drawer app clipped v-model="drawer">
     <v-list dense>
-      <!-- <MenuListItem
-        :title="'Bảng điều khiển'"
-        :icon="'mdi-view-dashboard-outline'"
-        :path="'dashboard'"
-      /> -->
       <MenuListItem
         :title="'Dịch vụ của tôi'"
         :icon="'mdi-layers-triple-outline'"
@@ -47,9 +42,9 @@
           :path="'computing-management'"
         />
         <MenuListItem
-          :title="'Quản lý hệ thống'"
+          :title="'Quản lý máy ảo'"
           :icon="'mdi-widgets-outline'"
-          :disabled="true"
+          :path="'virtual-machine-management'"
         />
       </template>
       <v-divider dark class="my-4" />
@@ -81,7 +76,15 @@ export default {
     accountType: null
   }),
   computed: {
-    ...mapState("featureRequest", ["featureRequestStatus"])
+    ...mapState("featureRequest", ["featureRequestStatus"]),
+    drawer: {
+      get() {
+        return this.$store.state.ui.drawer;
+      },
+      set(value) {
+        return this.$store.dispatch("ui/toggleDrawer", value);
+      }
+    }
   },
   created() {
     this.accountType = Jwt.getProperty("type");

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex ml-3 mr-1">
     <div class="d-flex align-center">
-      <span class="title mr-3 ">Quản lý tính toán</span>
+      <span class="title mr-3 ">Quản lý máy ảo</span>
     </div>
     <v-spacer />
   </div>
@@ -9,16 +9,8 @@
 
 <script>
 export default {
-  components: {},
   computed: {},
-  data: () => ({
-    dialog: {
-      title: "Tạo yêu cầu tính toán",
-      cancelTitle: "Hủy",
-      confirmTitle: "Tạo",
-      isOpen: false
-    }
-  }),
+  data: () => ({}),
   beforeDestroy() {},
   methods: {}
 };

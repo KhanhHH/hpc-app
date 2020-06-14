@@ -3,7 +3,8 @@ const initalState = {
     status: false,
     timeout: 5000,
     message: ""
-  }
+  },
+  drawer: true
 };
 
 const state = initalState;
@@ -16,6 +17,9 @@ const mutations = {
   },
   TOGGLE_SNACKBAR(state, payload) {
     state.snackbar.status = payload;
+  },
+  TOGGLE_DRAWER(state, payload) {
+    state.drawer = payload;
   }
 };
 const actions = {
@@ -25,6 +29,9 @@ const actions = {
   },
   closeSnackbar({ commit }) {
     commit("TOGGLE_SNACKBAR", false);
+  },
+  toggleDrawer({ commit }, payload) {
+    commit("TOGGLE_DRAWER", payload);
   }
 };
 

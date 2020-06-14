@@ -25,6 +25,7 @@
     </td>
     <td>
       <v-btn
+        v-if="item.status !== 'completed'"
         :disabled="item.status !== 'pending'"
         class="white--text"
         color="red"
@@ -32,6 +33,14 @@
         @click="cancelQueueStatus()"
       >
         <span>Hủy</span>
+      </v-btn>
+      <v-btn
+        v-if="item.status === 'completed'"
+        class="white--text"
+        color="green"
+        small
+      >
+        <span>Xem kết quả</span>
       </v-btn>
     </td>
   </tr>
