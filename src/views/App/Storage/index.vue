@@ -25,13 +25,10 @@ export default {
     async $route(to) {
       const { id } = to.params;
       if (!id) {
-        await this.$store.dispatch("storage/getMyStorage");
-        const { id, folderType } = this.currentFolder;
-        await this.$store.dispatch("storage/getFolder", {
-          id,
-          folderType
-        });
+        await this.$store.dispatch("storage/initalLoad");
       } else {
+        await this.$store.dispatch("storage/reset", "fileList");
+        await this.$store.dispatch("storage/reset", "folderList");
         await this.$store.dispatch("storage/getFolder", {
           id,
           folderType: "directory"
@@ -42,18 +39,16 @@ export default {
   async created() {
     const { id } = this.$router.currentRoute.params;
     if (!id) {
-      await this.$store.dispatch("storage/getMyStorage");
-      const { id, folderType } = this.currentFolder;
-      await this.$store.dispatch("storage/getFolder", {
-        id,
-        folderType
-      });
+      await this.$store.dispatch("storage/initalLoad");
     } else {
       await this.$store.dispatch("storage/getFolder", {
         id,
         folderType: "directory"
       });
     }
+  },
+  async beforeDestroy() {
+    await this.$store.dispatch("storage/reset");
   }
 };
 </script>

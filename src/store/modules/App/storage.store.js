@@ -1,6 +1,5 @@
 import StorageService from "@/services/modules/storage.service";
-
-const initalState = {
+const defaultState = {
   isLoading: false,
   requestStatus: "",
   requestError: {
@@ -23,10 +22,23 @@ const initalState = {
   fileList: [],
   folderList: []
 };
-
-const state = initalState;
+const getDefaultState = property => {
+  if (!property) {
+    return defaultState;
+  } else {
+    return defaultState[property];
+  }
+};
+const state = getDefaultState();
 const getters = {};
 const mutations = {
+  RESET(state, payload) {
+    if (!payload) {
+      Object.assign(state, getDefaultState());
+    } else {
+      state[payload] = getDefaultState(payload);
+    }
+  },
   SET_IS_LOADING(state, payload) {
     state.isLoading = payload;
   },
@@ -56,11 +68,60 @@ const mutations = {
   }
 };
 const actions = {
+  reset({ commit }, payload) {
+    commit("RESET", payload);
+  },
   selectItem({ commit }, payload) {
     commit("SET_SELECTED_ITEM", payload);
   },
   updateSelectItemType({ commit }, payload) {
     commit("SET_SELECTED_ITEM_TYPE", payload);
+  },
+  async initalLoad({ commit }) {
+    commit("SET_IS_LOADING", true);
+    try {
+      const myStorage = await StorageService.getMyStorage();
+      const {
+        currentSize,
+        maxSize,
+        startDate,
+        endDate,
+        status,
+        rootFolderId
+      } = myStorage.data;
+      commit("SET_MY_STORAGE", {
+        currentSize,
+        maxSize,
+        startDate,
+        endDate,
+        status
+      });
+
+      commit("SET_CURRENT_FOLDER", {
+        id: rootFolderId,
+        folderType: "root"
+      });
+
+      const folder = await StorageService.getFolder(rootFolderId, "root");
+      const { childFiles, childFolders } = folder.data;
+      commit("SET_FILE_LIST", childFiles);
+      commit("SET_FOLDER_LIST", childFolders);
+
+      commit("SET_REQUEST_STATUS", "success");
+    } catch (error) {
+      commit("SET_REQUEST_STATUS", "error");
+      const { message, statusCode } = error.response.data;
+      const isMessageArray = Array.isArray(message);
+      if (isMessageArray) {
+        commit("SET_REQUEST_ERROR", {
+          message: message[0],
+          statusCode
+        });
+      } else {
+        commit("SET_REQUEST_ERROR", { message, statusCode });
+      }
+    }
+    commit("SET_IS_LOADING", false);
   },
   async getMyStorage({ commit }) {
     commit("SET_IS_LOADING", true);
