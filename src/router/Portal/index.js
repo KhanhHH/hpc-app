@@ -1,4 +1,4 @@
-import Home from "@/views/Portal/Home.vue";
+// import Home from "@/views/Portal/Home.vue";
 import Login from "@/views/Portal/Login.vue";
 import Jwt from "@/utils/jwt";
 
@@ -6,7 +6,8 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    redirect: "/login"
+    // component: Home
   },
   {
     path: "/login",
