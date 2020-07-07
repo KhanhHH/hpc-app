@@ -58,6 +58,7 @@ export default {
     ]
   }),
   async created() {
+    await this.$store.dispatch("featureRequest/getMyFeatureRequestStatus");
     this.serviceList[0].requestStatus = this.featureRequestStatus.storage;
     this.serviceList[1].requestStatus = this.featureRequestStatus.computing;
     this.serviceList[2].requestStatus = this.featureRequestStatus.virtualMachine;

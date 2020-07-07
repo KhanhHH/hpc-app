@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <StorageInfo class="mt-2 mb-4" />
-    <div :class="{ disabled: myStorage.status === 'deactive' }">
+    <div :class="{ disabled: !isFeatureActive }">
       <FolderNavigator class="mb-3" />
       <FileList />
     </div>
@@ -49,6 +49,18 @@ export default {
   },
   async beforeDestroy() {
     await this.$store.dispatch("storage/reset");
+  },
+  methods: {
+    isFeatureActive() {
+      if (
+        this.myStorage.status === "deactive" ||
+        new Date(this.myStorage.endDate) <= new Date()
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   }
 };
 </script>
